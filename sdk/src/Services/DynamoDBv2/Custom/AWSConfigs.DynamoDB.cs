@@ -63,6 +63,12 @@ namespace Amazon
         public const string DynamoDBContextTableNamePrefixKey = "AWS.DynamoDBContext.TableNamePrefix";
 
         /// <summary>
+        /// Key for the DynamoDBContextTableNamePostfix property.
+        /// <seealso cref="AWSConfigsDynamoDB.DynamoDBContextTableNamePostfix"/>
+        /// </summary>
+        public const string DynamoDBContextTableNamePostfixKey = "AWS.DynamoDBContext.TableNamePostfix";
+
+        /// <summary>
         /// Configures the default TableNamePrefix that the DynamoDBContext will use if
         /// not manually configured.
         /// Changes to this setting will only take effect in newly-constructed instances of
@@ -130,10 +136,18 @@ namespace Amazon.Util
         public string TableNamePrefix { get; set; }
 
         /// <summary>
+        /// Configures the default TableNamePostfix that the DynamoDBContext will use if
+        /// not manually configured.
+        /// 
+        /// TableNamePostfix is used after TableAliases have been applied.
+        /// </summary>
+        public string TableNamePostfix { get; set; }
+
+        /// <summary>
         /// A string-to-string dictionary (From-Table to To-Table) used by DynamoDBContext to
         /// use a different table from one that is configured for a type.
         /// 
-        /// Remapping is done before applying TableNamePrefix.
+        /// Remapping is done before applying TableNamePrefix and TableNamePostfix.
         /// </summary>
         public Dictionary<string, string> TableAliases { get; private set; }
 
@@ -166,7 +180,7 @@ namespace Amazon.Util
         internal DynamoDBContextConfig()
         {
             this.TableNamePrefix = AWSConfigs.GetConfig(AWSConfigsDynamoDB.DynamoDBContextTableNamePrefixKey);
-
+            this.TableNamePostfix = AWSConfigs.GetConfig(AWSConfigsDynamoDB.DynamoDBContextTableNamePostfixKey);
             TableAliases = new Dictionary<string, string>(StringComparer.Ordinal);
             TypeMappings = new Dictionary<Type, TypeMapping>();
         }
@@ -177,6 +191,7 @@ namespace Amazon.Util
             if (section != null && section.ElementInformation.IsPresent)
             {
                 TableNamePrefix = section.TableNamePrefix;
+                TableNamePostfix = section.TableNamePostfix;
 
                 InternalSDKUtils.FillDictionary(section.TypeMappings.Items, t => t.Type, t => new TypeMapping(t), TypeMappings);
                 InternalSDKUtils.FillDictionary(section.TableAliases.Items, t => t.FromTable, t => t.ToTable, TableAliases);
@@ -392,6 +407,7 @@ namespace Amazon.Util
     {
 
         private const string tableNamePrefixKey = "tableNamePrefix";
+        private const string tableNamePostfixKey = "tableNamePostfix";
         private const string tableAliasesKey = "tableAliases";
         private const string mappingsKey = "mappings";
 
@@ -400,6 +416,13 @@ namespace Amazon.Util
         {
             get { return (string)this[tableNamePrefixKey]; }
             set { this[tableNamePrefixKey] = value; }
+        }
+
+        [ConfigurationProperty(tableNamePostfixKey)]
+        public string TableNamePostfix
+        {
+            get { return (string)this[tableNamePostfixKey]; }
+            set { this[tableNamePostfixKey] = value; }
         }
 
         [ConfigurationProperty(tableAliasesKey)]

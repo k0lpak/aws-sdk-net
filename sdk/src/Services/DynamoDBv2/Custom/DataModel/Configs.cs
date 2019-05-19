@@ -59,6 +59,7 @@ namespace Amazon.DynamoDBv2.DataModel
         public DynamoDBContextConfig()
         {
             TableNamePrefix = AWSConfigsDynamoDB.Context.TableNamePrefix;
+            TableNamePostfix = AWSConfigsDynamoDB.Context.TableNamePostfix;
             Conversion = DynamoDBEntryConversion.CurrentConversion;
         }
 
@@ -82,6 +83,14 @@ namespace Amazon.DynamoDBv2.DataModel
         /// table names are used.
         /// </summary>
         public string TableNamePrefix { get; set; }
+
+        /// <summary>
+        /// Property that directs DynamoDBContext to postfix all table names
+        /// with a specific string.
+        /// If property is null or empty, no postfix is used and default
+        /// table names are used.
+        /// </summary>
+        public string TableNamePostfix { get; set; }
 
         /// <summary>
         /// Property that directs DynamoDBContext to ignore null values
@@ -300,6 +309,9 @@ namespace Amazon.DynamoDBv2.DataModel
             string tableNamePrefix =
                 !string.IsNullOrEmpty(operationConfig.TableNamePrefix) ? operationConfig.TableNamePrefix :
                 !string.IsNullOrEmpty(contextConfig.TableNamePrefix) ? contextConfig.TableNamePrefix : string.Empty;
+            string tableNamePostfix = 
+                !string.IsNullOrEmpty(operationConfig.TableNamePostfix) ? operationConfig.TableNamePostfix :
+                !string.IsNullOrEmpty(contextConfig.TableNamePostfix) ? contextConfig.TableNamePostfix : string.Empty;
             bool backwardQuery = operationConfig.BackwardQuery ?? false;
             string indexName =
                 !string.IsNullOrEmpty(operationConfig.IndexName) ? operationConfig.IndexName : DefaultIndexName;
@@ -317,6 +329,7 @@ namespace Amazon.DynamoDBv2.DataModel
             QueryFilter = queryFilter;
             ConditionalOperator = conditionalOperator;
             Conversion = conversion;
+            TableNamePostfix = tableNamePostfix;
 
             State = new OperationState();
         }
@@ -341,6 +354,14 @@ namespace Amazon.DynamoDBv2.DataModel
         /// table names are used.
         /// </summary>
         public string TableNamePrefix { get; set; }
+
+        /// <summary>
+        /// Property that directs DynamoDBContext to postfix all table names
+        /// with a specific string.
+        /// If property is null or empty, no postfix is used and default
+        /// table names are used.
+        /// </summary>
+        public string TableNamePostfix { get; set; }
 
         /// <summary>
         /// Property that directs DynamoDBContext to ignore null values

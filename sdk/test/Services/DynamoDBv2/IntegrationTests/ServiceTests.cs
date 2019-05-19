@@ -25,7 +25,7 @@ namespace AWSSDK_DotNet.IntegrationTests.Tests.DynamoDB
             int tableCount = tables.Count;
 
             // Create hash-key table
-            var table1Name = TableNamePrefix + "Table1";
+            var table1Name = TableNamePrefix + "Table1" + TableNamePostfix;
             Client.CreateTable(
                 table1Name,
                 new List<KeySchemaElement>
@@ -40,7 +40,7 @@ namespace AWSSDK_DotNet.IntegrationTests.Tests.DynamoDB
             CreatedTables.Add(table1Name);
 
             // Create hash-and-range-key table
-            var table2Name = TableNamePrefix + "Table2";
+            var table2Name = TableNamePrefix + "Table2" + TableNamePostfix;
             Client.CreateTable(
                 table2Name,
                 new List<KeySchemaElement>
@@ -57,7 +57,7 @@ namespace AWSSDK_DotNet.IntegrationTests.Tests.DynamoDB
             CreatedTables.Add(table2Name);
 
             // Create hash-key table with global index
-            var table3Name = TableNamePrefix + "Table3";
+            var table3Name = TableNamePrefix + "Table3" + TableNamePostfix;
             Client.CreateTable(new CreateTableRequest
             {
                 TableName = table3Name,
@@ -93,7 +93,7 @@ namespace AWSSDK_DotNet.IntegrationTests.Tests.DynamoDB
             WaitForTableStatus(CreatedTables, TableStatus.ACTIVE);
 
             // Create hash-and-range-key table with local and global indexes
-            var table4Name = TableNamePrefix + "Table4";
+            var table4Name = TableNamePrefix + "Table4" + TableNamePostfix;
             Client.CreateTable(new CreateTableRequest
             {
                 TableName = table4Name,

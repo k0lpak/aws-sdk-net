@@ -57,6 +57,8 @@ namespace AWSSDK_DotNet.IntegrationTests.Tests.DynamoDB
             // Since tables have a variable prefix, configure the prefix for the process
             AWSConfigsDynamoDB.Context.TableNamePrefix = TableNamePrefix;
 
+            AWSConfigsDynamoDB.Context.TableNamePostfix = TableNamePostfix;
+
             // Construct single context object to use for all operations
             CreateContext(DynamoDBEntryConversion.V1);
         }
@@ -122,6 +124,9 @@ namespace AWSSDK_DotNet.IntegrationTests.Tests.DynamoDB
         public static readonly string BaseTableNamePrefix = "DotNetTests";
         public static readonly string TableNamePrefix = BaseTableNamePrefix + "-" +
             (ReuseTables ? string.Empty : + DateTime.Now.ToFileTime() + "-");
+        public static readonly string BaseTableNamePostfix = "DotNetTestsPostfix";
+        public static readonly string TableNamePostfix = "-" + BaseTableNamePostfix + "-" +
+            (ReuseTables ? string.Empty: DateTime.Now.ToFileTime().ToString());
         public static List<string> CreatedTables = new List<string>();
 
         public static void ClearTable(string tableName)
@@ -148,9 +153,9 @@ namespace AWSSDK_DotNet.IntegrationTests.Tests.DynamoDB
 
         public static void CreateTestTables()
         {
-            hashTableName = TableNamePrefix + "HashTable";
-            hashRangeTableName = TableNamePrefix + "HashRangeTable";
-            numericHashRangeTableName = TableNamePrefix + "NumericHashRangeTable";
+            hashTableName = TableNamePrefix + "HashTable" + TableNamePostfix;
+            hashRangeTableName = TableNamePrefix + "HashRangeTable" + TableNamePostfix;
+            numericHashRangeTableName = TableNamePrefix + "NumericHashRangeTable" + TableNamePostfix;
             bool createHashTable = true;
             bool createHashRangeTable = true;
             bool createNumericHashRangeTable = true;
